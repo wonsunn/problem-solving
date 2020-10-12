@@ -4,12 +4,9 @@ import java.util.*;
 class Main {
 
     private static class Info {
-        String str;
-        int posStr, posF, posS;
+        int posF, posS;
 
-        Info (String str, int posStr, int posF, int posS) {
-            this.str = str;
-            this.posStr = posStr;
+        Info (int posF, int posS) {
             this.posF = posF;
             this.posS = posS;
         }
@@ -35,28 +32,27 @@ class Main {
             boolean[][] visited = new boolean[first.length() + 1][second.length() + 1];
 
             Queue<Info> q = new LinkedList<>();
-            q.add(new Info("", 0, 0, 0));
+            q.add(new Info(0, 0));
 
             boolean yes = false;
             while (!q.isEmpty()) {
-                String str = q.peek().str;
-                int posStr = q.peek().posStr;
                 int posF = q.peek().posF;
                 int posS = q.peek().posS;
+                int posStr = posF + posS;
 
                 q.poll();
 
-                if (str.equals(third) && posStr == third.length()) {
+                if (posF == first.length() && posS == second.length() && posStr == third.length()) {
                     yes = true;
                     break;
                 }
 
                 if (posF < first.length() && !visited[posF + 1][posS] && first.charAt(posF) == third.charAt(posStr)) {
-                    q.add(new Info(str.concat(String.valueOf(first.charAt(posF))), posStr + 1, posF + 1, posS));
+                    q.add(new Info(posF + 1, posS));
                     visited[posF + 1][posS] = true;
                 }
                 if (posS < second.length() && !visited[posF][posS + 1] && second.charAt(posS) == third.charAt(posStr)) {
-                    q.add(new Info(str.concat(String.valueOf(second.charAt(posS))), posStr + 1, posF, posS + 1));
+                    q.add(new Info(posF, posS + 1));
                     visited[posF][posS + 1] = true;
                 }
             }
